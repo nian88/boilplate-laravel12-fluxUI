@@ -1,4 +1,5 @@
 import './bootstrap';
+import './../../vendor/power-components/livewire-powergrid/dist/powergrid' // atau .js
 
 function refreshTime() {
     const el = document.getElementById('realtime-clock');
