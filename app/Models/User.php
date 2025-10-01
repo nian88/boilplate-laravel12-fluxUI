@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use HasUuids;
+    use HasRoles;
 
     public $incrementing = false;
     protected $keyType   = 'string';
@@ -52,7 +54,7 @@ class User extends Authenticatable
     }
 
     // (opsional) gunakan UUID yang terurut (lebih ramah index)
-    protected function newUniqueId(): string
+    public function newUniqueId(): string
     {
         return (string) \Illuminate\Support\Str::orderedUuid();
     }
