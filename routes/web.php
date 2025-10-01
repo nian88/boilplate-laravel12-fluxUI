@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Settings\Permissions;
+use App\Livewire\Settings\Roles;
+use App\Livewire\Settings\UserAccess;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('welcome'))->name('home');
@@ -28,4 +31,10 @@ Route::prefix('tickets')->name('tickets.')->group(function () {
 
 Route::prefix('reports')->name('reports.')->group(function () {
     Route::view('/', 'pages.reports.index')->name('index');
+});
+
+Route::prefix('settings')->name('settings.')->group(function () {
+    Route::get('/roles', Roles::class)->name('roles');
+    Route::get('/permissions', Permissions::class)->name('permissions');
+    Route::get('/user-access', UserAccess::class)->name('user-access');
 });
