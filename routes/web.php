@@ -1,11 +1,22 @@
 <?php
 
+use App\Livewire\Auth\LoginForm;
 use App\Livewire\Settings\Permissions;
 use App\Livewire\Settings\Roles;
 use App\Livewire\Settings\UserAccess;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('welcome'))->name('home');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', LoginForm::class)->name('login');
+});
+Route::get('/logout', function () {
+    auth()->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login')->with('status','Anda telah keluar.');
+})->middleware('auth')->name('logout');
 
 Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
 Route::view('/settings', 'pages.settings')->name('settings');
