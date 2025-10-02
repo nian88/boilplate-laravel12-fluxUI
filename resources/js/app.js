@@ -1,5 +1,7 @@
 import './bootstrap';
 import './../../vendor/power-components/livewire-powergrid/dist/powergrid' // atau .js
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 function refreshTime() {
     const el = document.getElementById('realtime-clock');
@@ -25,3 +27,23 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshTime();
     setInterval(refreshTime, 1000);
 });
+
+// Opsional: rapikan perilaku
+NProgress.configure({ showSpinner: false, trickleSpeed: 120 })
+
+/** A. Progress untuk initial page load (full reload) */
+let __initial = setTimeout(() => NProgress.start(), 120) // hindari flicker utk load yg cepat
+window.addEventListener('load', () => { clearTimeout(__initial); NProgress.done() })
+
+/** B. Progress untuk Livewire wire:navigate */
+window.addEventListener('livewire:navigating', () => NProgress.start())
+window.addEventListener('livewire:navigated',  () => NProgress.done())
+
+/** C. Progress untuk request Livewire (aksi/submit) — Livewire v3 hooks */
+document.addEventListener('livewire:init', () => {
+    Livewire.hook('commit', ({ succeed, fail }) => {
+        NProgress.start()
+        succeed(() => queueMicrotask(() => NProgress.done()))
+        fail(() => NProgress.done())
+    })
+})

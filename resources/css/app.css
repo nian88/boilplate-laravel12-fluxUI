@@ -51,3 +51,8 @@
         --color-accent-foreground: var(--color-white);
     }
 }
+
+#nprogress .bar { height: 2px; background: var(--nprogress); }
+#nprogress .peg { box-shadow: 0 0 10px var(--nprogress), 0 0 5px var(--nprogress); }
+:root { --nprogress: #22d3ee; }       /* teal/sky – sesuaikan brand */
+:root.dark { --nprogress: #38bdf8; }  /* warna saat dark */

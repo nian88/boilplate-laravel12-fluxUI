@@ -24,9 +24,9 @@
     <flux:sidebar.nav>
         <flux:sidebar.item icon="home" :current="request()->routeIs('dashboard')"  href="{{ route('dashboard') }}">Home</flux:sidebar.item>
         <flux:sidebar.group icon="cog-6-tooth" heading="Pengaturan" expandable  :expanded="request()->routeIs(['settings.*','roles.*','units.*'])">
-            <flux:sidebar.item href="{{ route('settings.roles') }}" icon="shield-check" :current="request()->routeIs('settings.roles')">Roles</flux:sidebar.item>
-            <flux:sidebar.item href="{{ route('settings.permissions') }}" icon="key" :current="request()->routeIs('settings.permissions')">Permissions</flux:sidebar.item>
-            <flux:sidebar.item href="{{ route('settings.user-access') }}" icon="user-group" :current="request()->routeIs('settings.user-access')">User Access</flux:sidebar.item>
+            <flux:sidebar.item wire:navigate href="{{ route('settings.roles') }}" icon="shield-check" :current="request()->routeIs('settings.roles')">Roles</flux:sidebar.item>
+            <flux:sidebar.item wire:navigate href="{{ route('settings.permissions') }}" icon="key" :current="request()->routeIs('settings.permissions')">Permissions</flux:sidebar.item>
+            <flux:sidebar.item wire:navigate href="{{ route('settings.user-access') }}" icon="user-group" :current="request()->routeIs('settings.user-access')">User Access</flux:sidebar.item>
         </flux:sidebar.group>
     </flux:sidebar.nav>
     <flux:sidebar.spacer/>

@@ -74,9 +74,15 @@ final class UserTable extends PowerGridComponent
 
             // Filter SELECT by Role (bisa multiSelect juga—tanpa TomSelect pakai select biasa)
 
-            Filter::inputText('roles_names')
-                ->placeholder('Cari Role…')
-                ->filterRelation('roles', 'name'),
+
+            Filter::select('name', 'id')
+                ->dataSource(Role::all())
+                ->optionLabel('roles_names')
+                ->optionValue('id'),
+
+//            Filter::inputText('roles_names')
+//                ->placeholder('Cari Role…')
+//                ->filterRelation('roles', 'name'),
         ];
     }
 
