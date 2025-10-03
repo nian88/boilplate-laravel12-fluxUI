@@ -3,8 +3,8 @@
     <div class="hidden lg:flex relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-sky-400/20 via-fuchsia-400/20 to-teal-300/20 dark:from-sky-400/10 dark:via-fuchsia-400/10 dark:to-teal-300/10"></div>
         <div class="m-auto px-10">
-            <img src="/logo-light.png" class="h-10 dark:hidden" alt="logo">
-            <img src="/logo-dark.png" class="h-10 hidden dark:block" alt="logo">
+            <img src="{{ asset('logo-light-imap.webp') }}" class="h-10 dark:hidden" alt="logo">
+            <img src="{{ asset('logo-light-imap.webp') }}" class="h-10 hidden dark:block" alt="logo">
             <h1 class="mt-10 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">Selamat datang 👋</h1>
             <p class="mt-3 text-zinc-600 dark:text-zinc-300 leading-relaxed">
                 Silakan masuk untuk mengakses Sistem Informasi.
@@ -20,13 +20,20 @@
     <div class="flex items-center justify-center p-6 lg:p-10">
         <div class="w-full max-w-md">
             <div class="mb-8 text-center lg:hidden">
-                <img src="/logo-light.png" class="h-10 inline dark:hidden" alt="logo">
-                <img src="/logo-dark.png" class="h-10 hidden dark:inline" alt="logo">
+                <img src="{{ asset('logo-light-imap.webp') }}" class="h-10 inline dark:hidden" alt="logo">
+                <img src="{{ asset('logo-light-imap.webp') }}" class="h-10 hidden dark:inline" alt="logo">
             </div>
 
-            @if (session('status'))
-                <flux:callout icon="information-circle" class="mb-4">
-                    <flux:callout.heading>{{ session('status') }}</flux:callout.heading>
+            @php
+                $status  = session('status');
+                $type    = is_array($status) ? ($status['type'] ?? 'info') : 'info';
+                $message = is_array($status) ? ($status['message'] ?? '') : $status;
+                $icon    = $type === 'success' ? 'check-circle' : ($type === 'error' ? 'exclamation-triangle' : 'information-circle');
+            @endphp
+
+            @if ($message)
+                <flux:callout :variant="$type" icon="{{ $icon }}" class="mb-4">
+                    <flux:callout.heading>{{ $message }}</flux:callout.heading>
                 </flux:callout>
             @endif
 
@@ -46,46 +53,15 @@
                             required
                     />
                 </div>
-
-                {{-- Password + toggle (pakai Alpine yang aman untuk Flux input) --}}
-                <div x-data="{ show: false }"
-                     x-init="
-       const el = document.getElementById('pwd');
-       const apply = () => { if (el) el.type = show ? 'text' : 'password' };
-       apply(); $watch('show', apply);
-     "
-                     class="space-y-1">
-
-                    {{-- wrapper relative agar tombol diposisikan terhadap tinggi input --}}
-                    <div class="relative">
-                        <flux:input
-                                id="pwd"
-                                type="password"
-                                label="Kata Sandi"
-                                placeholder="••••••••"
-                                icon="lock-closed"
-                                wire:model.live="password"
-                                autocomplete="current-password"
-                                required
-                                class="pr-12"  {{-- beri ruang untuk tombol di kanan --}}
-                        />
-
-                        {{-- tombol eye, selalu center terhadap input --}}
-                        <button type="button"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center
-                   text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200"
-                                x-on:click="show = !show"
-                                aria-label="Toggle password">
-                            <svg x-show="!show" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-width="1.7" d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>
-                            </svg>
-                            <svg x-show="show" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-width="1.7" d="M3 3l18 18M10.6 10.7a3 3 0 004.7 3.3M7.5 7.7C5.2 9.1 3.7 11 3 12c0 0 3.8 7 10 7 2 0 3.7-.6 5.1-1.4M13.5 6.2C12.9 6.1 12.5 6 12 6 5.8 6 2 13 2 13"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
+                <flux:input id="pwd"
+                            type="password"
+                            label="Kata Sandi"
+                            placeholder="••••••••"
+                            icon="lock-closed"
+                            wire:model.live="password"
+                            autocomplete="current-password"
+                            required
+                            viewable />
 
                 <div class="flex items-center justify-between">
                     <label class="inline-flex items-center gap-2 text-sm">
@@ -96,9 +72,11 @@
                     </a>
                 </div>
 
-                <flux:button type="submit" variant="primary" class="w-full"
-                             icon="arrow-right-end-on-rectangle"
-                             wire:loading.attr="disabled">
+                <flux:button
+                        :disabled="$errors->has('email') || $errors->has('password') || blank($email) || blank($password)"
+                        type="submit" variant="primary" class="w-full"
+                        icon="arrow-right-end-on-rectangle"
+                        wire:loading.attr="disabled">
                     <span wire:loading.remove>Masuk</span>
                     <span wire:loading>Memproses…</span>
                 </flux:button>

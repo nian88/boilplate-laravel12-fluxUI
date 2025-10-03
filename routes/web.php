@@ -15,7 +15,7 @@ Route::get('/logout', function () {
     auth()->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
-    return redirect()->route('login')->with('status','Anda telah keluar.');
+    return redirect()->route('login') ->with('status', ['type' => 'success', 'message' => 'Anda telah keluar.']);
 })->middleware('auth')->name('logout');
 
 Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');

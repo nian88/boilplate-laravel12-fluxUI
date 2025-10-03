@@ -31,13 +31,8 @@
     </flux:sidebar.nav>
     <flux:sidebar.spacer/>
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
-        <flux:sidebar.profile avatar="https://fluxui.dev/img/demo/user.png" name="Olivia Martin"/>
+        <flux:sidebar.profile avatar="https://fluxui.dev/img/demo/user.png" name="{{ auth()->user()->name }}"/>
         <flux:menu>
-            <flux:menu.radio.group>
-                <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                <flux:menu.radio>Truly Delta</flux:menu.radio>
-            </flux:menu.radio.group>
-            <flux:menu.separator/>
             <flux:menu.item wire:navigate href="{{ route('logout') }}" icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
         </flux:menu>
     </flux:dropdown>
@@ -49,10 +44,7 @@
         <flux:dropdown position="top" align="start">
             <flux:profile avatar="https://fluxui.dev/img/demo/user.png"/>
             <flux:menu>
-                <flux:menu.radio.group>
-                    <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
-                    <flux:menu.radio>Truly Delta</flux:menu.radio>
-                </flux:menu.radio.group>
+                <flux:heading>{{ auth()->user()->name }}</flux:heading>
                 <flux:menu.separator/>
                 <flux:menu.item wire:navigate href="{{ route('logout') }}" icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
             </flux:menu>
